@@ -20,3 +20,7 @@ yarn dev
 -   [] **Login with Google:** Using Firebase SDK to Login and Authorization
 -   [] **Scraping search data:** In search
 -   [] **UI** In progress
+
+
+## Reference 
+- [Plantuml](https://plantuml.com/object-diagram)
