@@ -1,0 +1,31 @@
+@startuml
+
+package "Client" {
+  User -> [Login]
+  [Import CVS module]
+}
+
+cloud {
+  [Firebase Authenticaion]
+}
+
+cloud {
+  [CDN html result]
+}
+
+Component "Web Server" as WS << Nodejs >>
+
+database "Postgre" {
+  frame "userinfo" 
+  frame "keyword-result"
+}
+
+
+[Login] --> WS
+[WS] ..> [Firebase Authenticaion] : HTTP
+[Import CVS module] -> [WS]
+[WS] -left-> [Postgre]
+[WS] --> [CDN html result]
+
+
+@enduml
