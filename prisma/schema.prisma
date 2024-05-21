@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,47 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+  BLOCKED
+}
+
+model User {
+  uuid       String       @id @unique
+  status     UserStatus   @default(ACTIVE)
+  lastLogin  DateTime?
+  firstLogin DateTime?
+  UserSearch UserSearch[]
+
+  @@index([uuid])
+}
+
+model Keyword {
+  id             Int          @id @default(autoincrement())
+  key            String
+  htmlUrl        String?
+  resultCount    Int?
+  searchDuration Int?         @db.SmallInt
+  adsWordsCount  Int?         @db.SmallInt
+  urlCount       Int?
+  createdAt      DateTime     @default(now())
+  UserSearch     UserSearch[]
+
+  @@index(key)
+}
+
+model UserSearch {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  keywordId Int
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [uuid])
+  keyword Keyword @relation(fields: [keywordId], references: [id])
+
+  @@index([userId, keywordId])
 }

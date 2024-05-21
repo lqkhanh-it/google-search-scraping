@@ -3,11 +3,13 @@
 First, run the development server:
 
 ```bash
-docker build -t my-postgres-image .
-
-docker run -d --name my-postgres-container -p 5432:5432 my-postgres-image
+docker-compose up -d
 
 yarn install
+
+npx prisma format 
+
+npx prisma migrate dev
 
 yarn dev
 ```

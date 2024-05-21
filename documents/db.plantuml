@@ -1,31 +1,28 @@
 @startuml
-
-package "Client" {
-  User -> [Login]
-  [Import CVS module]
+object User {
+ uid: varchar(20) (PK)
+ status: enum
+ last_login: Datetime
+ first_login: Datetime
 }
 
-cloud {
-  [Firebase Authenticaion]
+object Keyword {
+ key: varchar(20) (PK)
+ html_url: varchar(255)
+ result_count: integer
+ search_duration: integer
+ ads_words_count: integer
+ url_count: smallint
+ created_at: Datetime
 }
 
-cloud {
-  [CDN html result]
+object UserSearch {
+ id: serial (PK)
+ uuid: varchar(20) (FK)
+ keyword_id: varchar(20) (FK)
+ created_at: Datetime
 }
 
-Component "Web Server" as WS << Nodejs >>
-
-database "Postgre" {
-  frame "userinfo" 
-  frame "keyword-result"
-}
-
-
-[Login] --> WS
-[WS] ..> [Firebase Authenticaion] : HTTP
-[Import CVS module] -> [WS]
-[WS] -left-> [Postgre]
-[WS] --> [CDN html result]
-
-
+User o-- Keyword
+Keyword --o UserSearch
 @enduml
