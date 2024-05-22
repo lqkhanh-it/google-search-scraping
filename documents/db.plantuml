@@ -1,28 +1,53 @@
 @startuml
-object User {
- uid: varchar(20) (PK)
- status: enum
- last_login: Datetime
- first_login: Datetime
+
+class User {
+    + uuid: String {id, unique}
+    + status: UserStatus (default: ACTIVE)
+    + lastLogin: DateTime?
+    + firstLogin: DateTime?
+    + userSearches: UserSearch[]
 }
 
-object Keyword {
- key: varchar(20) (PK)
- html_url: varchar(255)
- result_count: integer
- search_duration: integer
- ads_words_count: integer
- url_count: smallint
- created_at: Datetime
+class UserSearch {
+    + id: Int {id, autoincrement}
+    + userId: String
+    + keywordId: Int
+    + createdAt: DateTime (default: now())
+    + keyword: Keyword[] { 1 }
+    + user: User { 1 }
 }
 
-object UserSearch {
- id: serial (PK)
- uuid: varchar(20) (FK)
- keyword_id: varchar(20) (FK)
- created_at: Datetime
+class Keyword {
+    + id: Int {id, autoincrement}
+    + key: String
+    + htmlUrl: String?
+    + resultCount: Int?
+    + searchDuration: SmallInt?
+    + adsWordsCount: SmallInt?
+    + urlCount: Int?
+    + createdAt: DateTime (default: now())
+    + status: KeywordStatus (default: PENDING)
+    + userSearchId: Int
+    + userSearch: UserSearch { 1 }
 }
 
-User o-- Keyword
-Keyword --o UserSearch
+User <|-- UserSearch : userSearches
+UserSearch <|-- Keyword : keyword { 1 }
+UserSearch --> User : user { 1 }
+Keyword <|-- UserSearch : userSearch { 1 }
+
+enum UserStatus {
+    ACTIVE
+    INACTIVE
+    PENDING
+    BLOCKED
+}
+
+enum KeywordStatus {
+    PENDING
+    COMPLETED
+    RUNNING
+    FAILED
+}
+
 @enduml
