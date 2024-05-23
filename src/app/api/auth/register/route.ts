@@ -1,14 +1,14 @@
-import { hash } from "bcryptjs";
 import { createUser } from "../../../../models/user.model";
 
 export  async function POST(req: Request) {
-  const { emailHash, passwordHash } = await req.json();
+  const { email, passwordHash } = await req.json();
 
   try {
 
     await createUser({
-      emailHash,
+      email,
       passwordHash,
+      firstLogin: new Date(),
     });
 
     return Response.json({ success: true }, { status: 201 });
