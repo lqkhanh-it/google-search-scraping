@@ -3,6 +3,8 @@
 class User {
     + uuid: String {id, unique}
     + status: UserStatus (default: ACTIVE)
+    + email: String {unique}
+    + passwordHash: String 
     + lastLogin: DateTime?
     + firstLogin: DateTime?
     + userSearches: UserSearch[]
@@ -11,6 +13,7 @@ class User {
 class UserSearch {
     + id: Int {id, autoincrement}
     + userId: String
+    + group: String
     + keywordId: Int
     + createdAt: DateTime (default: now())
     + keyword: Keyword[] { 1 }
@@ -32,8 +35,6 @@ class Keyword {
 }
 
 User <|-- UserSearch : userSearches
-UserSearch <|-- Keyword : keyword { 1 }
-UserSearch --> User : user { 1 }
 Keyword <|-- UserSearch : userSearch { 1 }
 
 enum UserStatus {

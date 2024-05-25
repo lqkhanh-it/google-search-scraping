@@ -6,26 +6,25 @@ package "Client" {
 }
 
 cloud {
-  [Firebase Authenticaion]
-}
-
-cloud {
   [CDN html result]
 }
 
+Component "Authenticaion Service" as AS << NextAuth>>
 Component "Web Server" as WS << Nodejs >>
+Component "Scraping Service" as CS << Flash Scrapy >>
 
 database "Postgre" {
   frame "userinfo" 
   frame "keyword-result"
 }
 
-
 [Login] --> WS
-[WS] ..> [Firebase Authenticaion] : HTTP
+[WS] .left.> [AS]
 [Import CVS module] -> [WS]
+[WS] -> [CS]
+[CS] --> [WS]
+[CS] -> [CDN html result]
 [WS] -left-> [Postgre]
-[WS] --> [CDN html result]
 
 
 @enduml
