@@ -33,20 +33,20 @@ const LoginPage: React.FC = () => {
       const result = await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/home",
+        callbackUrl: "/",
         redirect: false,
       });
 
       if (result && result.ok) {
         console.log("Login successful!");
-        router.replace("/home");
+        router.replace("/");
       } else if (result && result.error) {
         throw new Error(result.error);
       }
 
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      setLoading(false);
       setError("An error occurred during login");
     }
   };

@@ -1,19 +1,16 @@
-import React, { useState } from "react";
-import Papa from "papaparse";
-
-interface CSVData {
-  [key: string]: string;
-}
+import React, { useEffect, useState } from "react";
+import { csvFileToArray } from "../../libs/fileUtils";
 
 const ImportCSV: React.FC = () => {
-  const [csvData, setCsvData] = useState<CSVData[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [file, setFile] = useState<File>();
+  const [keys, setKeys] = useState<string[]>([]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMessage(null);
     const file = event.target.files?.[0];
 
-    console.log(file);
+    setFile(file);
 
     if (!file) {
       setErrorMessage("No file selected.");
@@ -24,29 +21,27 @@ const ImportCSV: React.FC = () => {
       setErrorMessage("Please select a CSV file.");
       return;
     }
+  };
 
+  const handleFile = (localFile: File) => {
     const reader = new FileReader();
     reader.onload = (e: any) => {
       const text = e.target.result as string;
-      Papa.parse(text, {
-        header: false,
-        skipEmptyLines: true,
-        complete: (results: Papa.ParseResult<CSVData>) => {
-          if (results.errors) {
-            setErrorMessage("Error parsing CSV: " + results.errors[0]);
-            return;
-          }
-          setCsvData(results.data);
-          setErrorMessage(null);
-        },
-      });
+      const data = csvFileToArray(text);
+      setKeys(data);
     };
-    reader.readAsText(file);
+    reader.readAsText(localFile);
   };
+
+  useEffect(() => {
+    if (file) {
+      handleFile(file);
+    }
+  }, [file]);
 
   return (
     <div>
-      <div className="flex items-center justify-center py-5">
+      <div className="flex flex-col items-center justify-center py-5">
         <label
           htmlFor="dropzone-file"
           className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -61,9 +56,9 @@ const ImportCSV: React.FC = () => {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
               />
             </svg>
@@ -83,28 +78,29 @@ const ImportCSV: React.FC = () => {
             onChange={handleFileChange}
           />
         </label>
+        <div>
+          {errorMessage && <p className="text-red-800">{errorMessage}</p>}
+        </div>
       </div>
-      {errorMessage && <p className="text-red-800">{errorMessage}</p>}
-      {csvData.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              {Object.keys(csvData[0])?.map((header) => (
-                <th key={header}>{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {csvData.map((row, index) => (
-              <tr key={index}>
-                {Object.entries(row).map(([cell, value]) => (
-                  <td key={cell}>{value}</td>
-                ))}
+
+      <div className="flex flex-col items-center justify-center py-5">
+        {keys.length > 0 && (
+          <table>
+            <thead>
+              <tr>
+                <th key={"header"}>Keyword</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {keys.map((row, index) => (
+                <tr key={row}>
+                  <td key={index}>{row}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 };

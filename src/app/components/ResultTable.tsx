@@ -53,7 +53,11 @@ const ResultTable = ({ data = dummyData }: { data?: any[] }) => {
               </td>
               <td className="px-6 py-4">{item.status}</td>
               <td className="px-6 py-4">{item.htmlUrl}</td>
-              <td className="px-6 py-4">{item.resultCount}</td>
+              <td className="px-6 py-4">
+                {new Intl.NumberFormat("en", {
+                  maximumSignificantDigits: 3,
+                }).format(item.resultCount)}
+              </td>
               <td className="px-6 py-4">{item.searchDuration}</td>
               <td className="px-6 py-4">{item.adsWordsCount}</td>
               <td className="px-6 py-4">{item.urlCount}</td>
