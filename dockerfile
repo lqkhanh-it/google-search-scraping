@@ -33,7 +33,6 @@ COPY --from=BUILD /app/public ./public
 COPY --from=BUILD --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=BUILD --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-USER nextjs
 EXPOSE 3000
 ENV PORT 3000
 
