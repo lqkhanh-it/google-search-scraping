@@ -132,7 +132,7 @@ const LoginPage: React.FC = () => {
               {error && <p className="error text-red-800">{error}</p>}
 
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Don't have an account?{" "}
+                {` Don't have an account?`}
                 <a
                   href="/auth/register"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"

@@ -7,13 +7,25 @@ docker-compose up -d
 
 yarn install
 
-npx prisma format 
-
-npx prisma migrate dev
-
 yarn dev
 ```
 
+migrate database
+
+```bash
+npx prisma format 
+
+npx prisma migrate dev
+```
+
+
+build
+
+```bash
+docker build -t nextjs-docker .
+docker images
+docker run -p 3000:3000 nextjs-docker
+```
 
 ### Checklist
 
