@@ -29,11 +29,12 @@ docker run -p 3000:3000 nextjs-docker
 
 ### Checklist
 
--   [] **Setup Project:** Setup NextJS with TailwindCSS, SASS, PostgreSQL, Firebase Authentication, Docker
--   [] **Create Modal Database:** Write flow and modal database, implement into code base
+-   [x] **Setup Project:** Setup NextJS with TailwindCSS, SASS, PostgreSQL, Firebase Authentication, Docker
+-   [x] **Create Modal Database:** Write flow and modal database, implement into code base
 -   [] **Login with Google:** Using Firebase SDK to Login and Authorization
--   [] **Scraping search data:** In search
--   [] **UI** In progress
+-   [x] **Login with Email and Password:** User must register by email and password to login
+-   [x] **Scraping search data:** Using scrapy by Flask Python backend to crawl data from google search and return when done. 
+-   [] **UI** Map flow front end - backend - Scrapy service
 
 
 ## Reference 
