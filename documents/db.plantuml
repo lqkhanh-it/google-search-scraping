@@ -1,0 +1,54 @@
+@startuml
+
+class User {
+    + uuid: String {id, unique}
+    + status: UserStatus (default: ACTIVE)
+    + email: String {unique}
+    + passwordHash: String 
+    + lastLogin: DateTime?
+    + firstLogin: DateTime?
+    + userSearches: UserSearch[]
+}
+
+class UserSearch {
+    + id: Int {id, autoincrement}
+    + userId: String
+    + group: String
+    + keywordId: Int
+    + createdAt: DateTime (default: now())
+    + keyword: Keyword[] { 1 }
+    + user: User { 1 }
+}
+
+class Keyword {
+    + id: Int {id, autoincrement}
+    + key: String
+    + htmlUrl: String?
+    + resultCount: Int?
+    + searchDuration: SmallInt?
+    + adsWordsCount: SmallInt?
+    + urlCount: Int?
+    + createdAt: DateTime (default: now())
+    + status: KeywordStatus (default: PENDING)
+    + userSearchId: Int
+    + userSearch: UserSearch { 1 }
+}
+
+User <|-- UserSearch : userSearches
+Keyword <|-- UserSearch : userSearch { 1 }
+
+enum UserStatus {
+    ACTIVE
+    INACTIVE
+    PENDING
+    BLOCKED
+}
+
+enum KeywordStatus {
+    PENDING
+    COMPLETED
+    RUNNING
+    FAILED
+}
+
+@enduml

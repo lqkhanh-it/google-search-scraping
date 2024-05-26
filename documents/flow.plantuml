@@ -1,0 +1,30 @@
+@startuml
+
+package "Client" {
+  User -> [Login]
+  [Import CVS module]
+}
+
+cloud {
+  [CDN html result]
+}
+
+Component "Authenticaion Service" as AS << NextAuth>>
+Component "Web Server" as WS << Nodejs >>
+Component "Scraping Service" as CS << Flash Scrapy >>
+
+database "Postgre" {
+  frame "userinfo" 
+  frame "keyword-result"
+}
+
+[Login] --> WS
+[WS] .left.> [AS]
+[Import CVS module] -> [WS]
+[WS] -> [CS]
+[CS] --> [WS]
+[CS] -> [CDN html result]
+[WS] -left-> [Postgre]
+
+
+@enduml

@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+  BLOCKED
+}
+
+model User {
+  uuid         String       @id @unique @default(uuid())
+  email    String       @unique
+  passwordHash String
+  status       UserStatus   @default(ACTIVE)
+  lastLogin    DateTime?
+  firstLogin   DateTime?
+  UserSearch   UserSearch[]
+
+  @@index([uuid])
+  @@index([email])
+}
+
+enum KeywordStatus {
+  PENDING
+  COMPLETED
+  RUNNING
+  FAILED
+}
+
+model UserSearch {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  keywordId Int
+  createdAt DateTime @default(now())
+
+  keyword Keyword[]
+  user    User      @relation(fields: [userId], references: [uuid])
+
+  @@index([userId, keywordId])
+}
+
+model Keyword {
+  id             Int           @id @default(autoincrement())
+  key            String
+  htmlUrl        String?
+  resultCount    Int?
+  searchDuration Int?          @db.SmallInt
+  adsWordsCount  Int?          @db.SmallInt
+  urlCount       Int?
+  createdAt      DateTime      @default(now())
+  status         KeywordStatus @default(PENDING)
+  userSearchId   Int
+
+  userSearch UserSearch @relation(fields: [userSearchId], references: [id])
+
+  @@index([key, userSearchId, status])
+}

@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1,
+    "key": "best laptops 2024",
+    "htmlUrl": null,
+    "resultCount": null,
+    "searchDuration": null,
+    "adsWordsCount": null,
+    "urlCount": null,
+    "createdAt": "2024-05-26T00:00:00.000Z",
+    "status": "PENDING",
+    "userSearchId": 1
+  },{
+    "id": 2,
+    "key": "best phone 2025",
+    "htmlUrl": "https,https,https",
+    "resultCount": 140000000,
+    "searchDuration": 2000,
+    "adsWordsCount": 200,
+    "urlCount": 12,
+    "createdAt": "2024-05-26T00:00:00.000Z",
+    "status": "PENDING",
+    "userSearchId": 1
+  }
+]
